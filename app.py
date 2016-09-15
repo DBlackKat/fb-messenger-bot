@@ -38,7 +38,7 @@ def webhook():
                     if "attachments" in messaging_event["message"]:
                         for image in messaging_event["message"]["attachments"]:
                             img = image["payload"]["url"]
-                            send_message(sender_id, "got it, thanks!")
+                            send_message(sender_id, str(img))
                     if "text" in messaging_event["message"]:
                         message_text = messaging_event["message"]["text"]  # the message's text
                         if message_text == 'status':
