@@ -1,10 +1,10 @@
 import os
 import sys
 import json
-
+import qrtools, urllib
 import requests
 from flask import Flask, request
-
+from img_decode import decode_img
 app = Flask(__name__)
 
 
@@ -35,10 +35,13 @@ def webhook():
                 if messaging_event.get("message"):  # someone sent us a message
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
+                    image_name = messaging_event["watermark"]+recipient_id+".jpg"
                     if "attachments" in messaging_event["message"]:
                         for image in messaging_event["message"]["attachments"]:
-                            img = image["payload"]["url"]
-                            send_message(sender_id, str(img))
+                            url = image["payload"]["url"]
+                            decode_data = decode_img(url,image_name)
+                            send_message(sender_id, decode_data)
+
                     if "text" in messaging_event["message"]:
                         message_text = messaging_event["message"]["text"]  # the message's text
                         if message_text == 'status':
@@ -80,7 +83,6 @@ def send_message(recipient_id, message_text):
     if r.status_code != 200:
         log(r.status_code)
         log(r.text)
-
 
 def log(message):  # simple wrapper for logging to stdout on heroku
     print str(message)
