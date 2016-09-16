@@ -8,7 +8,6 @@ import qrtools,urllib,os
 from flask import Flask, jsonify, abort, make_response, request
 
 app = Flask(__name__)
-auth = HTTPBasicAuth()
 
 @app.route('/DORM/api/v1.0/120/new',methods = ['POST'])
 def create_item():
