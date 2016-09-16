@@ -4,7 +4,6 @@ import json
 import qrtools, urllib
 import requests
 from flask import Flask, request
-from img_decode import decode_img
 app = Flask(__name__)
 
 
@@ -39,8 +38,7 @@ def webhook():
                     if "attachments" in messaging_event["message"]:
                         for image in messaging_event["message"]["attachments"]:
                             url = image["payload"]["url"]
-                            decode_data = decode_img(url,image_name)
-                            send_message(sender_id, decode_data)
+                            send_message(sender_id, url)
 
                     if "text" in messaging_event["message"]:
                         message_text = messaging_event["message"]["text"]  # the message's text
